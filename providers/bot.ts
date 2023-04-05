@@ -1,4 +1,4 @@
-import {Client, Sendable} from 'oicq'
+import {Client, Sendable} from 'icqq'
 import config from './config'
 import attachGroupMessageHandler from '../handlers/attachGroupMessageHandler'
 import {error} from '../utils/log'
@@ -23,10 +23,30 @@ export const loginBot = () => new Promise<any>(resolve => {
       })
     }).login()
   } else {
-    bot.on("system.login.slider", function (e) {
-      console.log("输入ticket：")
-      process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
-    }).login("password")    
+    bot.on('system.login.slider', (e) => {
+      console.log('输入滑块地址获取的ticket后继续。\n滑块地址:    ' + e.url)
+      process.stdin.once('data', (data) => {
+        bot.submitSlider(data.toString().trim())
+      })
+    })
+    bot.on('system.login.device', (e) => {
+      console.log('请选择验证方式:(1：短信验证   其他：扫码验证)')
+      process.stdin.once('data', (data) => {
+        if (data.toString().trim() === '1') {
+          bot.sendSmsCode()
+          console.log('请输入手机收到的短信验证码:')
+          process.stdin.once('data', (res) => {
+            bot.submitSmsCode(res.toString().trim())
+          })
+        } else {
+          console.log('扫码完成后回车继续：' + e.url)
+          process.stdin.once('data', () => {
+            bot.login()
+          })
+        }
+      })
+    })
+    bot.login(config.bot.uin, config.bot.password)
   }
   //机器人接收二维码和解码签到事件
   attachGroupMessageHandler(bot)
