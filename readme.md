@@ -71,7 +71,13 @@
 4. `yarn build`
 5. `yarn start`
 
-提示：机器人使用的账号必须已经在 [oicq](https://github.com/takayama-lily/oicq) 框架上登录过
+提示：机器人使用的账号必须已经在 [icqq](https://github.com/icqqjs/icqq) 框架上登录过
+#### 手动部署+linux系统自启
+1. 确认[手动部署](#手动部署)可以登录成功
+2. 修改 `systemd/superstar.service` 文件，修改`User`和`WorkingDirectory`为自己设备上的路径。
+3. `sudo mv systemd/superstar.service  /usr/lib/systemd/system/`
+4. `sudo systemctl enable --now superstar.service`
+5. 查看是否启动成功 `sudo systemctl status superstar.service`
 
 ## 限制
 
