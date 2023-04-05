@@ -1,0 +1,15 @@
+[Unit]
+Description=superstar checkin
+Documentation=https://yegetables/superstar-checkin.git
+After=network.target
+Wants=network.target
+
+[Service]
+User=ajian
+Type=simple
+WorkingDirectory=/home/ajian/work/tmp/myself/superstar-checkin
+ExecStart=/usr/bin/yarn start
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
